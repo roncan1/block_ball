@@ -10,12 +10,14 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
     GameGraphic gg;
     int width, height, ball_x, ball_y;
+    int man_width, man_height, man_x, man_y;
     String left_right = "left";
     String up_down = "up";
 
@@ -30,7 +32,22 @@ public class MainActivity extends AppCompatActivity {
         ball_x = width/2;
         ball_y = height/2;
 
+        man_x = width/2;
+        man_y = height - 200;
+        man_height = 75;
+        man_width = width/5;
+
         handler.sendEmptyMessage(0);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_MOVE:
+                man_x = (int)event.getX();
+                break;
+        }
+        return super.onTouchEvent(event);
     }
 
     Handler handler = new Handler(){
@@ -45,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             }
             if (ball_x < 0) {
                 left_right = "right";
-            } else if (ball_x > width) {
+            } else if (ball_x > width - 100) {
                 left_right = "left";
             }
 
@@ -56,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             }
             if (ball_y < 0) {
                 up_down = "down";
-            } else if (ball_y > height) {
+            } else if (ball_y > height - 100) {
                 up_down = "up";
             }
 
@@ -87,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
 
             p.setColor(Color.BLUE);
             canvas.drawText("●", ball_x,ball_y,p);
+
+            canvas.drawRect(man_x, man_y, man_x + man_width, man_y + man_height,p);
         }
     }
 
